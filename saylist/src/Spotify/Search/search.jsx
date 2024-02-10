@@ -45,6 +45,24 @@ export class Search {
     });
 
     const trackResponse = await reponse.json();
-    return trackResponse;
+
+    let simplifiedResponse = trackResponse.tracks.items
+      .map((item) => ({
+        name: item.name,
+        album: {
+          id: item.album.id,
+          images: item.album.images,
+          name: item.album.name,
+        },
+        artists: item.artists.map((artist) => artist.name),
+        popularity: item.popularity,
+      }))
+      .filter(
+        (track) =>
+          track.name.replace(/[\s\p{P}]/gu, "").toLowerCase() ==
+          query.replace(/[\s\p{P}]/gu, "").toLowerCase()
+      )
+      .sort((a, b) => b.popularity - a.popularity);
+    return simplifiedResponse;
   }
 }
