@@ -1,38 +1,25 @@
 import { getGenericToken } from "@/Spotify/Auth/serverAuth";
 import { makePhrase } from "./utilities";
 import { SayListBlock } from "./SayListBlock";
+import { Search } from "@/Spotify/Search/search";
 
 const CLIENT_ID = "a1143666ce6a418ab007c2501431c096";
 const CLIENT_SECRET = "e6138706c3d64583ad685dcfd185d8c8";
 const AUTH_TOKEN_GRANT_TYPE = "client_credentials";
 
-const searchTracks = async (accessToken, query) => {
-  const headers = {
-    Authorization: `Bearer ${accessToken}`,
-  };
-
-  const args = new URLSearchParams({
-    q: query,
-    type: "track",
-    limit: "50",
-  });
-
-  const reponse = await fetch(`https://api.spotify.com/v1/search?${args}`, {
-    method: "GET",
-    headers: headers,
-  });
-
-  const trackResponse = await reponse.json();
-  return trackResponse;
-};
+const search = new Search(getGenericToken); //TODO: rename this to reflect that it's an object that helps us search
 
 export const POST = async (req) => {
   try {
     const { message } = await req.json();
 
-    let accessToken = await getGenericToken();
+    //let accessToken = await getGenericToken();
 
-    let searchResult = await searchTracks(accessToken, "hello");
+    //let searchResult = await searchTracks(accessToken, "hello");
+
+    let blah = await search.searchTracks("hello");
+
+    let blooh = await search.searchTracks("fortnite");
 
     let playlist = [];
     let current_block = null;
@@ -76,7 +63,7 @@ export const POST = async (req) => {
 
         if (size <= words_remaining) {
           current_block.sizeLastTried = size;
-          current_block.phrase = makePhrase(words, word_index, size);
+          current_block.phrase = makePhrase(message, word_index, size);
         }
       }
     }

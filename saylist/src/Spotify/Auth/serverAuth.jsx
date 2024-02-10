@@ -18,7 +18,7 @@ export const getGenericToken = async () => {
     });
 
     const authResponse = await response.json();
-    return authResponse.access_token;
+    return authResponse;
   } catch (error) {
     console.error("Error: ", error);
   }
