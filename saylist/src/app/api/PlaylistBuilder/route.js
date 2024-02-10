@@ -19,8 +19,6 @@ export const POST = async (req) => {
 
     let blah = await search.searchTracks("hello");
 
-    let blooh = await search.searchTracks("fortnite");
-
     let playlist = [];
     let current_block = null;
     let block_index = 0;
